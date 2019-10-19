@@ -1,7 +1,9 @@
 import React from "react";
 import { Avatar, List, ListItem } from "material-ui";
+import { AppBar, Drawer, MenuItem } from "material-ui";
 import { Grid, Row, Col } from "react-flexbox-grid";
 import { withRouter } from "react-router";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 class SpicyMenu extends React.Component {
@@ -128,11 +130,48 @@ class SpicyMenu extends React.Component {
       foodItems: newListFood
     });
   }
-
+  toggleDrawer = () => this.setState({ open: !this.state.open });
   render() {
     const { search } = this.state;
     return (
       <div className="app-container">
+        <AppBar
+          title="My Restaurant"
+          iconClassNameRight="muidocs-icon-navigation-expand-more"
+          onLeftIconButtonClick={this.toggleDrawer}
+        />
+        <Drawer
+          docked={false}
+          width={300}
+          onRequestChange={this.toggleDrawer}
+          open={this.state.open}
+        >
+          <AppBar
+            title="Flames Restaurant"
+            onLeftIconButtonClick={this.toggleDrawer}
+          />
+          <MenuItem
+            primaryText="Profile"
+            containerElement={<Link to="/" />}
+            onClick={() => {
+              this.toggleDrawer();
+            }}
+          />
+          <MenuItem
+            primaryText="Add Menu"
+            containerElement={<Link to="/addMenu" />}
+            onClick={() => {
+              this.toggleDrawer();
+            }}
+          />
+          <MenuItem
+            primaryText="Order"
+            containerElement={<Link to="/orders" />}
+            onClick={() => {
+              this.toggleDrawer();
+            }}
+          />
+        </Drawer>
         <div className="search-container">
           <label>Search Item:</label>
           <input

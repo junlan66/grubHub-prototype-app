@@ -60,6 +60,9 @@ class DetailPage extends React.Component {
         console.log(response);
       });
   }
+  handleClick(e) {
+    console.log("submitted");
+  }
 
   render() {
     return (

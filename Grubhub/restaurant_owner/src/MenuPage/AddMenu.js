@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import axios from "axios";
 import { userActions } from "../_actions";
+import { AppBar, Drawer, MenuItem } from "material-ui";
 
 class AddMenuPage extends React.Component {
   constructor(props) {
@@ -46,12 +47,51 @@ class AddMenuPage extends React.Component {
     }
     console.log("Added new Menu with" + JSON.stringify(this.state, null, 2));
   }
+  toggleDrawer = () => this.setState({ open: !this.state.open });
 
   render() {
     const { addingBreakfast } = this.props;
     const { menu_breakfast, submitted } = this.state;
     return (
       <div className="col-md-6 col-md-offset-3">
+        <AppBar
+          title="My Restaurant"
+          iconClassNameRight="muidocs-icon-navigation-expand-more"
+          onLeftIconButtonClick={this.toggleDrawer}
+        />
+        <Drawer
+          docked={false}
+          width={300}
+          onRequestChange={this.toggleDrawer}
+          open={this.state.open}
+        >
+          <AppBar
+            title="Flames Restaurant"
+            onLeftIconButtonClick={this.toggleDrawer}
+          />
+          <MenuItem
+            primaryText="Profile"
+            containerElement={<Link to="/" />}
+            onClick={() => {
+              this.toggleDrawer();
+            }}
+          />
+          <MenuItem
+            primaryText="Menu"
+            containerElement={<Link to="/menu" />}
+            onClick={() => {
+              this.toggleDrawer();
+            }}
+          />
+          <MenuItem
+            primaryText="Page"
+            containerElement={<Link to="/menuPage" />}
+            onClick={() => {
+              this.toggleDrawer();
+            }}
+          />
+        </Drawer>
+        <div className="container">{this.props.children}</div>
         <h2>Add to Menu</h2>
         <form name="form" onSubmit={this.handleSubmit}>
           <div

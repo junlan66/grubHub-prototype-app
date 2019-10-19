@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { userActions } from "../_actions";
+import { AppBar, Drawer, MenuItem } from "material-ui";
 
 import axios from "axios";
 
@@ -121,12 +122,50 @@ class HomePage extends React.Component {
       });
     }
   }
+  toggleDrawer = () => this.setState({ open: !this.state.open });
   render() {
     console.log("HOMEPAGE");
     console.log(this.props);
     const { user } = this.props;
     return (
       <div>
+        <AppBar
+          title="My Restaurant"
+          iconClassNameRight="muidocs-icon-navigation-expand-more"
+          onLeftIconButtonClick={this.toggleDrawer}
+        />
+        <Drawer
+          docked={false}
+          width={300}
+          onRequestChange={this.toggleDrawer}
+          open={this.state.open}
+        >
+          <AppBar
+            title="Flames Restaurant"
+            onLeftIconButtonClick={this.toggleDrawer}
+          />
+          <MenuItem
+            primaryText="Menu"
+            containerElement={<Link to="/menu" />}
+            onClick={() => {
+              this.toggleDrawer();
+            }}
+          />
+          <MenuItem
+            primaryText="Add Menu"
+            containerElement={<Link to="/addMenu" />}
+            onClick={() => {
+              this.toggleDrawer();
+            }}
+          />
+          <MenuItem
+            primaryText="Order"
+            containerElement={<Link to="/orders" />}
+            onClick={() => {
+              this.toggleDrawer();
+            }}
+          />
+        </Drawer>
         <h1>Hi {this.state.firstName}!</h1>
         <p>Update your profile</p>
         <form onSubmit={this.updateUser}>

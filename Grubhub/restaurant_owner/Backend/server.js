@@ -28,5 +28,6 @@ router.get("/restaurant/dataQuery/lunch", dataQuery.getLunchMenu);
 router.get("/restaurant/dataQuery/breakfast", dataQuery.getmenu);
 router.get("/restaurant/dataQuery/userInfo", dataQuery.userInfo);
 router.get("/restaurant/dataQuery/orders", dataQuery.getOrders);
+router.post("/restaurant/dataQuery/cancelOrder", dataQuery.cancelOrders);
 app.use("/api", router);
 app.listen(5000);

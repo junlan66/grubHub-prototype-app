@@ -1,6 +1,7 @@
 import React from "react";
 import { AppBar, Drawer, MenuItem } from "material-ui";
 import { Link } from "react-router-dom";
+
 import "./index.css";
 
 import FloatingActionButton from "material-ui/FloatingActionButton";
@@ -53,7 +54,7 @@ class MenuPages extends React.Component {
           />
           <MenuItem
             primaryText="Profile"
-            containerElement={<Link to="../ProfilePage/updateProfile" />}
+            containerElement={<Link to="/" />}
             onClick={() => {
               this.toggleDrawer();
             }}

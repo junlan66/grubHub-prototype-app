@@ -65,3 +65,12 @@ exports.getOrders = function(req, res) {
     res.send(result);
   });
 };
+
+exports.cancelOrders = function(req, res) {
+  //console.log(key, req.query.menu_breakfast);
+  connection.query("DELETE FROM cart", function(err, result, fields) {
+    if (err) throw err;
+    // console.log(result);
+    // res.send(result);
+  });
+};

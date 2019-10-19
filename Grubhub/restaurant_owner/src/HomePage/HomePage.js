@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Avatar, List, ListItem } from "material-ui";
 import { Grid, Row, Col } from "react-flexbox-grid";
+import { AppBar, Drawer, MenuItem } from "material-ui";
 
 class HomePage extends React.Component {
   constructor(props) {
@@ -20,13 +21,61 @@ class HomePage extends React.Component {
         });
       });
   }
-  cancelClick(e) {}
+  cancelClick(e) {
+    e.preventDefault();
+    console.log("cancled");
+    axios
+      .post("http://localhost:5000/api/restaurant/dataQuery/cancelOrder")
+      .then(response => {});
+  }
+  toggleDrawer = () => this.setState({ open: !this.state.open });
   render() {
     return (
       <div>
+        <AppBar
+          title="My Restaurant"
+          iconClassNameRight="muidocs-icon-navigation-expand-more"
+          onLeftIconButtonClick={this.toggleDrawer}
+        />
+        <Drawer
+          docked={false}
+          width={300}
+          onRequestChange={this.toggleDrawer}
+          open={this.state.open}
+        >
+          <AppBar
+            title="Flames Restaurant"
+            onLeftIconButtonClick={this.toggleDrawer}
+          />
+
+          <MenuItem
+            primaryText="Menu"
+            containerElement={<Link to="/menu" />}
+            onClick={() => {
+              this.toggleDrawer();
+            }}
+          />
+          <MenuItem
+            primaryText="Add Menu"
+            containerElement={<Link to="/addMenu" />}
+            onClick={() => {
+              this.toggleDrawer();
+            }}
+          />
+          <MenuItem
+            primaryText="Profile"
+            containerElement={<Link to="/profile" />}
+            onClick={() => {
+              this.toggleDrawer();
+            }}
+          />
+        </Drawer>
+        <div className="container">{this.props.children}</div>
+
         <Link to="../profile" className="btn btn-link">
           Edit Profile
         </Link>
+
         <h4>Restaurant Orders</h4>
         <List>
           Buyer
