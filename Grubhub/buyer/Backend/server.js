@@ -1,5 +1,6 @@
 var express = require("express");
 var login = require("./routes/loginroutes");
+var messages = require("./routes/messageroutes");
 var bodyParser = require("body-parser");
 var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -17,13 +18,14 @@ var router = express.Router();
 router.get("/", function(req, res) {
   res.json({ message: "welcome" });
 });
-//route to handle user registration
+//route to handle user actions
 router.post("/buyer/register", login.register);
 router.post("/buyer/login", login.login);
 router.post("/buyer/login/cart", login.cart);
 router.get("/buyer/login/userInfo", login.userInfo);
 router.get("/buyer/login/breakfast", login.getmenu);
 router.get("/buyer/login/lunch", login.getLunchMenu);
+router.get("/buyer/messages/textbox", messages.textbox);
 
 app.use("/api", router);
 app.listen(4000);

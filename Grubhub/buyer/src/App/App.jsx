@@ -16,6 +16,7 @@ import Menu from "../DetailPage/DetailPage";
 import MenuPages from "../MenuPage/menuPage";
 import HomePage from "../HomePage/HomePage";
 import OrderPage from "../OrderPage/OrderPage";
+import MessagePage from "../MessagePage/MessagePage";
 
 class App extends React.Component {
   constructor(props) {
@@ -46,6 +47,7 @@ class App extends React.Component {
                   <Route path="/menuPage" component={MenuPages} />
                   <Route path="/menu" component={Menu} />
                   <Route path="/order" component={OrderPage} />
+                  <Route path="/messagePage" component={MessagePage} />
                   <Route path="/menuDetail/:id" component={MenuDetail} />
                 </div>
               </Router>

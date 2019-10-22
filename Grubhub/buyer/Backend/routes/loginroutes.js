@@ -89,10 +89,6 @@ exports.login = function(req, res) {
           res.writeHead(401, {
             "Content-Type": "text/plain"
           });
-          // res.send({
-          //   code: 401,
-          //   failed: "Email and password does not match"
-          // });
           res.end("Fail login");
         }
       } else {
