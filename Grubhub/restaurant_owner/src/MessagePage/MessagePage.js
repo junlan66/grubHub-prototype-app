@@ -23,7 +23,7 @@ class MessagePage extends React.Component {
       messages: []
     };
     axios
-      .get("http://localhost:4000/api/buyer/messages/getTextbox")
+      .get("http://localhost:5000/api/restaurant/messages/getTextbox")
       .then(response => {
         this.setState({
           messages: this.state.messages.concat(response.data)
@@ -87,7 +87,7 @@ class SendMessageForm extends React.Component {
     console.log(new_messages);
 
     axios
-      .get("http://localhost:4000/api/buyer/messages/textbox", {
+      .get("http://localhost:5000/api/restaurant/messages/textbox", {
         params: {
           // send to backend
           // userId: user.id,

@@ -127,7 +127,6 @@ exports.userInfo = function(req, res) {
 };
 
 exports.getmenu = function(req, res) {
-  //console.log(key, req.query.menu_breakfast);
   connection.query("SELECT * FROM menu_breakfast", function(
     err,
     result,

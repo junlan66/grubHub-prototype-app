@@ -74,7 +74,7 @@ class ProfilePage extends React.Component {
         user.firstName = f;
         user.phoneNumber = p;
         user.email = e;
-        localStorage.setItem("user", JSON.stringify(user));
+        sessionStorage.setItem("user", JSON.stringify(user));
         this.setState({ firstName: user.firstName }); // backend
         this.setState({ phoneNumber: user.phoneNumber });
         this.setState({ email: user.email });
