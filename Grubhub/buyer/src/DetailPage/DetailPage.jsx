@@ -3,17 +3,24 @@ import { Avatar, List, ListItem } from "material-ui";
 import { Grid, Row, Col } from "react-flexbox-grid";
 import { withRouter } from "react-router";
 import axios from "axios";
+import { userActions } from "../_actions";
+import { connect } from "react-redux";
 
 class DetailPage extends React.Component {
   constructor(props) {
     super(props);
+    console.log("print props");
+    console.log(props);
     this.state = {
+      userName: this.props.user.firstName,
+      userID: this.props.user.id,
       foodItems: [],
       lunchItems: [],
       cartBrItems: []
     };
 
     this.Cart = this.Cart.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     // sent a GET request
     axios
       .get(
@@ -24,7 +31,6 @@ class DetailPage extends React.Component {
           foodItems: this.state.foodItems.concat(response.data)
         });
       });
-
     axios
       .get("http://localhost:4000/api/buyer/login/lunch?name=menu_lunch")
       .then(response => {
@@ -37,30 +43,19 @@ class DetailPage extends React.Component {
   Cart(foodItem) {
     //foodItem.preventDefault();
     console.log("Add to Cart");
-    console.log(foodItem.price + " " + foodItem.name);
     this.setState({ cartBrItems: this.state.cartBrItems.concat(foodItem) });
-    // var listContents = [];
-
-    // listContents.push(foodItem.id);
-    // localStorage.setItem(
-    //   "cartList",
-    //   JSON.stringify([listContents, "breakfast", "1"])
-    // );
-    // //setValue(JSON.stringify(listContents));
-    // console.log("print listcontents " + listContents);
-
+  }
+  handleClick(cartBrItems) {
+    console.log("front print cartBrItems" + cartBrItems);
     axios
-      .post("http://localhost:4000/api/buyer/login/cart", {
-        id: foodItem.id,
-        name: foodItem.name,
-        menutype: "breakfast",
-        quantity: "1"
+      .post("http://localhost:4000/api/buyer/order/submitOrder", {
+        userId: this.state.userID,
+        userName: this.state.userName,
+        cartList: cartBrItems
       })
       .then(response => {
         console.log(response);
       });
-  }
-  handleClick(e) {
     console.log("submitted");
   }
 
@@ -126,8 +121,10 @@ class DetailPage extends React.Component {
               </Row>
             </Grid>
           ))}
+          <button onClick={e => this.handleClick(this.state.cartBrItems)}>
+            Submit Order
+          </button>
         </List>
-        <button onClick={e => this.handleClick(e)}>Submit Order</button>
       </div>
     );
   }
@@ -136,5 +133,20 @@ class DetailPage extends React.Component {
 const RowItemStyle = {
   alignItems: "center"
 };
+//added
+function mapState(state) {
+  const { users, authentication } = state;
+  const { user } = authentication;
+  return { user, users };
+}
 
-export default DetailPage;
+const actionCreators = {
+  getUsers: userActions.getAll
+};
+
+const connectedDetailedPage = connect(
+  mapState,
+  actionCreators
+)(DetailPage);
+export { connectedDetailedPage as DetailPage };
+//export default DetailPage;

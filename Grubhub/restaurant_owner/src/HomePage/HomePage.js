@@ -14,7 +14,7 @@ class HomePage extends React.Component {
 
     // this.Cart = this.Cart.bind(this);
     axios
-      .get("http://localhost:5000/api/restaurant/dataQuery/orders")
+      .get("http://localhost:5000/api/restaurant/order/getOrder")
       .then(response => {
         this.setState({
           cartItems: this.state.cartItems.concat(response.data)

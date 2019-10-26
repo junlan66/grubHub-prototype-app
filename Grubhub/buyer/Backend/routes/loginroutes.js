@@ -121,11 +121,17 @@ exports.userInfo = function(req, res) {
     result
   ) {
     if (err) throw err;
+
+    res.send(result);
+  });
+};
+exports.getUserInfo = function(req, res) {
+  connection.query("SELECT * from buyer", function(err, result, fields) {
+    if (err) throw err;
     console.log(result);
     res.send(result);
   });
 };
-
 exports.getmenu = function(req, res) {
   connection.query("SELECT * FROM menu_breakfast", function(
     err,
@@ -133,7 +139,6 @@ exports.getmenu = function(req, res) {
     fields
   ) {
     if (err) throw err;
-    console.log(result);
     res.send(result);
   });
 };
@@ -142,7 +147,7 @@ exports.getLunchMenu = function(req, res) {
   //console.log(key, req.query.menu_breakfast);
   connection.query("SELECT * FROM menu_lunch", function(err, result, fields) {
     if (err) throw err;
-    console.log(result);
+    //console.log(result);
     res.send(result);
   });
 };

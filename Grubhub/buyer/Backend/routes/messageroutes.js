@@ -24,3 +24,19 @@ exports.getTextbox = function(req, res) {
       });
   });
 };
+
+exports.submitOrder = function(req, res) {
+  var oneOrder = req.body;
+  console.log("my mongo cartList is ");
+  MongoClient.connect(url, options1, function(err, client) {
+    assert.equal(null, err);
+    console.log("Connected correctly to MongoDB server.");
+    const db = client.db(dbName);
+    mongodb = db;
+    db.collection("customers").insert(oneOrder, function(err, res) {
+      if (err) throw err;
+      console.log("1 cart list inserted");
+      //db.close();
+    });
+  });
+};

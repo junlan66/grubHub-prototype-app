@@ -12,7 +12,7 @@ import { LoginPage } from "../LoginPage";
 import { RegisterPage } from "../RegisterPage";
 
 import MenuDetail from "../MenuPage/MenuDetail";
-import Menu from "../DetailPage/DetailPage";
+import { DetailPage } from "../DetailPage";
 import MenuPages from "../MenuPage/menuPage";
 import HomePage from "../HomePage/HomePage";
 import OrderPage from "../OrderPage/OrderPage";
@@ -45,7 +45,7 @@ class App extends React.Component {
                   <Route path="/login" component={LoginPage} />
                   <Route path="/register" component={RegisterPage} />
                   <Route path="/menuPage" component={MenuPages} />
-                  <Route path="/menu" component={Menu} />
+                  <Route path="/menu" component={DetailPage} />
                   <Route path="/order" component={OrderPage} />
                   <Route path="/messagePage" component={MessagePage} />
                   <Route path="/menuDetail/:id" component={MenuDetail} />

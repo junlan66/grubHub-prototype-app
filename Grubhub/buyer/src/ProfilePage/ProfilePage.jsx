@@ -22,9 +22,9 @@ class ProfilePage extends React.Component {
     this.props.getUsers();
   }
 
-  handleDeleteUser(id) {
-    return e => this.props.deleteUser(id);
-  }
+  // handleDeleteUser(id) {
+  //   return e => this.props.deleteUser(id);
+  // }
 
   handleChangeName(event) {
     // console.log("23121434 handleChange" + event.target.firstName);
@@ -53,7 +53,7 @@ class ProfilePage extends React.Component {
   updateUser(e) {
     e.preventDefault();
     console.log("USER update");
-    console.log(this.props);
+    console.log(this.props.user.email);
     const { user } = this.props;
     console.log("USER  is " + user);
     console.log("Phone" + this.state.phoneNumber);
@@ -92,7 +92,7 @@ class ProfilePage extends React.Component {
   }
   render() {
     console.log("ProfilePage");
-    console.log(this.props);
+    console.log(this.props.user.email);
     const { user } = this.props;
     return (
       <div>

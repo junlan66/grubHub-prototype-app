@@ -18,6 +18,24 @@ exports.getTextbox = function(req, res) {
       .find({})
       .toArray(function(err, result) {
         if (err) throw err;
+        // console.log(result);
+        res.send(result);
+        //db.close();
+      });
+  });
+};
+
+exports.getOrder = function(req, res) {
+  MongoClient.connect(url, options1, function(err, client) {
+    assert.equal(null, err);
+    console.log("Connected correctly to MongoDB server.");
+    const db = client.db(dbName);
+    mongodb = db;
+    db.collection("customers")
+      .find({})
+      .toArray(function(err, result) {
+        if (err) throw err;
+        //var myCart = result.query.userId;
         console.log(result);
         res.send(result);
         //db.close();

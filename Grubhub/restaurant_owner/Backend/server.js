@@ -33,5 +33,6 @@ router.get("/restaurant/dataQuery/orders", dataQuery.getOrders);
 router.post("/restaurant/dataQuery/cancelOrder", dataQuery.cancelOrders);
 router.get("/restaurant/messages/textbox", messages.textbox);
 router.get("/restaurant/messages/getTextbox", messageRoute.getTextbox);
+router.get("/restaurant/order/getOrder", messageRoute.getOrder);
 app.use("/api", router);
 app.listen(5000);
