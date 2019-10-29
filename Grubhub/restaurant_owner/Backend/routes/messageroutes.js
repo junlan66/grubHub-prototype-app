@@ -9,13 +9,18 @@ const options1 = {
 };
 
 exports.getTextbox = function(req, res) {
+  console.log("Print id  " + req.query.orderId);
+  var data = {
+    buyerId: req.query.buyerId,
+    orderId: req.query.orderId
+  };
   MongoClient.connect(url, options1, function(err, client) {
-    assert.equal(null, err);
+    //assert.equal(null, err);
     console.log("Connected correctly to MongoDB server.");
     const db = client.db(dbName);
     mongodb = db;
     db.collection("messages")
-      .find({})
+      .find({ id: data.orderId })
       .toArray(function(err, result) {
         if (err) throw err;
         // console.log(result);
@@ -27,7 +32,7 @@ exports.getTextbox = function(req, res) {
 
 exports.getOrder = function(req, res) {
   MongoClient.connect(url, options1, function(err, client) {
-    assert.equal(null, err);
+    //assert.equal(null, err);
     console.log("Connected correctly to MongoDB server.");
     const db = client.db(dbName);
     mongodb = db;
@@ -36,7 +41,7 @@ exports.getOrder = function(req, res) {
       .toArray(function(err, result) {
         if (err) throw err;
         //var myCart = result.query.userId;
-        console.log(result);
+        // console.log(result);
         res.send(result);
         //db.close();
       });

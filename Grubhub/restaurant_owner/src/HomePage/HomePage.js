@@ -9,25 +9,28 @@ class HomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cartItems: []
+      orderItems: []
     };
 
     // this.Cart = this.Cart.bind(this);
     axios
       .get("http://localhost:5000/api/restaurant/order/getOrder")
       .then(response => {
+        console.log(response.data);
+        // console.log("data" + response.data.toString());
         this.setState({
-          cartItems: this.state.cartItems.concat(response.data)
+          orderItems: this.state.orderItems.concat(response.data)
         });
       });
   }
   cancelClick(e) {
     e.preventDefault();
-    console.log("cancled");
+    console.log("canceled");
     axios
       .post("http://localhost:5000/api/restaurant/dataQuery/cancelOrder")
       .then(response => {});
   }
+  chatClick(orderItem) {}
   toggleDrawer = () => this.setState({ open: !this.state.open });
   render() {
     return (
@@ -75,19 +78,29 @@ class HomePage extends React.Component {
         <Link to="../profile" className="btn btn-link">
           Edit Profile
         </Link>
-
         <h4>Restaurant Orders</h4>
         <List>
-          Buyer
-          {this.state.cartItems.map(cartItem => (
-            // <ListBreak key={foodItem.id} {...foodItem} />
-            <Grid fluid key={cartItem.id}>
+          Order List
+          {this.state.orderItems.map(orderItem => (
+            <Grid fluid key={orderItem._id}>
               <Row center="lg" style={RowItemStyle}>
+                <Link
+                  to={{
+                    pathname: "/messagePage",
+                    data: orderItem
+                  }}
+                >
+                  Chart
+                </Link>
                 <Col xs={6} sm={6} lg={4}>
-                  {cartItem.name}
+                  {orderItem.userName}
                 </Col>
                 <Col xs={3} sm={3} lg={2}>
-                  {cartItem.price}
+                  {orderItem.cartList.map(cartItem => (
+                    <Row center="lg" style={RowItemStyle}>
+                      {cartItem.name}
+                    </Row>
+                  ))}
                 </Col>
               </Row>
             </Grid>

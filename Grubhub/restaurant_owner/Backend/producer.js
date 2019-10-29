@@ -25,6 +25,7 @@ var KeyedMessage = kafka.KeyedMessage;
 
 exports.textbox = function(req, res) {
   var content = req.query.messages;
+  var orderId = req.query.orderId;
   //console.log("print once and " + content);
   var client = new kafka.KafkaClient("localhost:2181", "my-client-id", {
     sessionTimeout: 300,
@@ -44,7 +45,7 @@ exports.textbox = function(req, res) {
     console.log("in ready");
     var messageBuffer = type.toBuffer({
       message: content,
-      id: "3e0c63c4-956a-4378-8a6d-2de636d191dekkkii",
+      id: orderId,
       timestamp: Date.now()
     });
     // Create a new payload
