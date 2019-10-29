@@ -15,7 +15,7 @@ exports.getTextbox = function(req, res) {
     orderId: req.query.orderId
   };
   MongoClient.connect(url, options1, function(err, client) {
-    //assert.equal(null, err);
+    assert.equal(null, err);
     console.log("Connected correctly to MongoDB server.");
     const db = client.db(dbName);
     mongodb = db;
@@ -32,7 +32,7 @@ exports.getTextbox = function(req, res) {
 
 exports.getOrder = function(req, res) {
   MongoClient.connect(url, options1, function(err, client) {
-    //assert.equal(null, err);
+    assert.equal(null, err);
     console.log("Connected correctly to MongoDB server.");
     const db = client.db(dbName);
     mongodb = db;
