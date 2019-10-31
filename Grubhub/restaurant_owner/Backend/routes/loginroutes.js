@@ -1,3 +1,10 @@
+//added
+const express = require("express");
+const router = express.Router();
+
+const jwt = require("jsonwebtoken");
+const passport = require("passport");
+//
 var mysql = require("mysql");
 var connection = mysql.createConnection({
   host: "127.0.0.1", //3306
@@ -50,59 +57,24 @@ exports.register = function(req, res) {
 };
 
 exports.login = function(req, res) {
-  var email = req.body.email;
-  var password = req.body.password;
-  console.log("in login");
-  connection.query("SELECT * FROM owner WHERE email = ?", [email], function(
-    error,
-    results,
-    fields
-  ) {
-    console.log("backedn received email is", email);
-    if (error) {
-      console.log("error ocurred", error);
-      res.writeHead(401, {
-        "Content-Type": "text/plain"
+  passport.authenticate("local", { session: false }, (err, user, info) => {
+    console.log(err);
+    if (err || !user) {
+      return res.status(400).json({
+        message: info ? info.message : "Login failed",
+        user: user
       });
-      res.end("Fail login");
-    } else {
-      // console.log('The solution is: ', results);
-      if (results.length > 0) {
-        console.log(results[0].password);
-        if (results[0].password == password) {
-          // res.writeHead(222, {
-          //   "Content-Type": "text/plain"
-          // });
-          var user = results[0];
-          console.log("USER IN BACK");
-          console.log(user);
-          res.send({
-            id: user.id,
-            firstName: user.name,
-            lastName: "",
-            email: user.email
-          });
-          res.end("sucessfull login");
-        } else {
-          console.log("Email and password does not match");
-          console.log("error ocurred", error);
-          res.writeHead(401, {
-            "Content-Type": "text/plain"
-          });
-          res.end("Fail login");
-        }
-      } else {
-        console.log("Email does not exits");
-        console.log("error ocurred", error);
-        res.writeHead(401, {
-          "Content-Type": "text/plain"
-        });
-        // res.send({
-        //   code: 401,
-        //   failed: "Email does not exits"
-        // });
-        res.end("Fail login");
-      }
     }
-  });
+
+    req.login(user, { session: false }, err => {
+      if (err) {
+        res.send(err);
+      }
+
+      //const token = jwt.sign(user, "your_jwt_secret");
+      const token = jwt.sign(JSON.stringify(user), "your_jwt_secret");
+
+      return res.json({ user, token });
+    });
+  })(req, res);
 };
