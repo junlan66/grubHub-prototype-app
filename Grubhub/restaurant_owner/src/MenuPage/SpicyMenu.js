@@ -14,11 +14,14 @@ class SpicyMenu extends React.Component {
       lunchItems: [],
       results: [],
       lunchItemsOg: [],
-      foodItemsOg: []
+      foodItemsOg: [],
+      currentPage: 1,
+      todosPerPage: 2
     };
     this.Remove = this.Remove.bind(this);
     this.RemoveLunch = this.RemoveLunch.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     // sent a GET request
     axios
       .get(
@@ -45,8 +48,6 @@ class SpicyMenu extends React.Component {
   }
 
   Remove(foodItemDelete) {
-    // Array.prototype.filter returns new array
-    // so we aren't mutating state here
     var arrayCopy = this.state.foodItems.filter(
       foodItem => foodItem.id !== foodItemDelete.id
     );
@@ -70,9 +71,6 @@ class SpicyMenu extends React.Component {
   }
 
   RemoveLunch(foodItemDelete) {
-    // Array.prototype.filter returns new array
-    // so we aren't mutating state here
-    // remove from temp
     var arrayCopy = this.state.lunchItems.filter(
       lunchItem => lunchItem.id !== foodItemDelete.id
     );
@@ -91,11 +89,7 @@ class SpicyMenu extends React.Component {
           menutype: "lunch"
         }
       })
-      .then(response => {
-        // this.setState({
-        //   userInfo: this.state.userInfo.concat(response.data)
-        // });
-      });
+      .then(response => {});
     console.log(arrayCopy);
     console.log(foodItemDelete.id);
   }
@@ -130,9 +124,42 @@ class SpicyMenu extends React.Component {
       foodItems: newListFood
     });
   }
+  //added
+  handleClick(event) {
+    this.setState({
+      currentPage: Number(event.target.id)
+    });
+  }
+  //
   toggleDrawer = () => this.setState({ open: !this.state.open });
   render() {
+    //added
     const { search } = this.state;
+    const { lunchItemsOg, foodItemsOg, currentPage, todosPerPage } = this.state;
+
+    // Logic for displaying todos
+    const indexOfLastTodo = currentPage * todosPerPage;
+    const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
+    const currentTodos = lunchItemsOg.slice(indexOfFirstTodo, indexOfLastTodo);
+    const currentTodosBreakfast = foodItemsOg.slice(
+      indexOfFirstTodo,
+      indexOfLastTodo
+    );
+
+    // Logic for displaying page numbers
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(lunchItemsOg.length / todosPerPage); i++) {
+      pageNumbers.push(i);
+    }
+
+    const renderPageNumbers = pageNumbers.map(number => {
+      return (
+        <li key={number} id={number} onClick={this.handleClick}>
+          {number}
+        </li>
+      );
+    });
+    //
     return (
       <div className="app-container">
         <AppBar
@@ -183,8 +210,7 @@ class SpicyMenu extends React.Component {
         </div>
         <List>
           Breakfast
-          {this.state.foodItems.map(foodItem => (
-            // <ListBreak key={foodItem.id} {...foodItem} />
+          {currentTodosBreakfast.map(foodItem => (
             <Grid fluid key={foodItem.id}>
               <Row center="lg" style={RowItemStyle}>
                 <a
@@ -194,10 +220,6 @@ class SpicyMenu extends React.Component {
                 >
                   X
                 </a>
-                {/* <th value={column} onClick={() => this.handleSort(column)}>{column}</th> */}
-                {/* <Col xs={3} sm={3} lg={2}>
-              <Avatar src={this.props.image} />
-            </Col> */}
 
                 <Col xs={6} sm={6} lg={4}>
                   {foodItem.name}
@@ -209,8 +231,7 @@ class SpicyMenu extends React.Component {
             </Grid>
           ))}
           Lunch
-          {this.state.lunchItems.map(lunchItem => (
-            // <SpicyMenuItemWithRouter key={lunchItem.id} {...lunchItem} />
+          {currentTodos.map(lunchItem => (
             <Grid fluid key={lunchItem.id}>
               <Row center="lg" style={RowItemStyle}>
                 <a
@@ -220,11 +241,6 @@ class SpicyMenu extends React.Component {
                 >
                   X
                 </a>
-                {/* <th value={column} onClick={() => this.handleSort(column)}>{column}</th> */}
-                {/* <Col xs={3} sm={3} lg={2}>
-              <Avatar src={this.props.image} />
-            </Col> */}
-
                 <Col xs={6} sm={6} lg={4}>
                   {lunchItem.name}
                 </Col>
@@ -235,6 +251,7 @@ class SpicyMenu extends React.Component {
             </Grid>
           ))}
         </List>
+        <ul id="page-numbers">{renderPageNumbers}</ul>
       </div>
     );
   }
@@ -243,7 +260,5 @@ class SpicyMenu extends React.Component {
 const RowItemStyle = {
   alignItems: "center"
 };
-
-// search code starts here
 
 export default SpicyMenu;

@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { Avatar, List, ListItem } from "material-ui";
 import { Grid, Row, Col } from "react-flexbox-grid";
 import { AppBar, Drawer, MenuItem } from "material-ui";
+var placeholder = document.createElement("li");
+placeholder.className = "placeholder";
 
 class HomePage extends React.Component {
   constructor(props) {
@@ -29,6 +31,32 @@ class HomePage extends React.Component {
       .then(response => {});
   }
   toggleDrawer = () => this.setState({ open: !this.state.open });
+  //added
+  dragStart(e) {
+    this.dragged = e.currentTarget;
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/html", this.dragged);
+  }
+  dragEnd(e) {
+    this.dragged.style.display = "block";
+    this.dragged.parentNode.removeChild(placeholder);
+
+    // update state
+    var data = this.state.colors;
+    var from = Number(this.dragged.dataset.id);
+    var to = Number(this.over.dataset.id);
+    if (from < to) to--;
+    data.splice(to, 0, data.splice(from, 1)[0]);
+    this.setState({ colors: data });
+  }
+  dragOver(e) {
+    e.preventDefault();
+    this.dragged.style.display = "none";
+    if (e.target.className === "placeholder") return;
+    this.over = e.target;
+    e.target.parentNode.insertBefore(placeholder, e.target);
+  }
+  //
   render() {
     return (
       <div>
@@ -76,33 +104,41 @@ class HomePage extends React.Component {
           Edit Profile
         </Link>
         <h4>Restaurant Orders</h4>
-        <List>
-          Order List
-          {this.state.orderItems.map(orderItem => (
-            <Grid fluid key={orderItem._id}>
-              <Row center="lg" style={RowItemStyle}>
-                <Link
-                  to={{
-                    pathname: "/messagePage",
-                    data: orderItem
-                  }}
-                >
-                  Chat
-                </Link>
-                <Col xs={6} sm={6} lg={4}>
-                  {orderItem.userName}
-                </Col>
-                <Col xs={3} sm={3} lg={2}>
-                  {orderItem.cartList.map(cartItem => (
-                    <Row center="lg" style={RowItemStyle}>
-                      {cartItem.name}
-                    </Row>
-                  ))}
-                </Col>
-              </Row>
-            </Grid>
-          ))}
-        </List>
+        <ul onDragOver={this.dragOver.bind(this)}>
+          <List>
+            Order List
+            {this.state.orderItems.map(orderItem => (
+              // <Grid fluid key={orderItem._id}>
+              <li
+                draggable="true"
+                onDragEnd={this.dragEnd.bind(this)}
+                onDragStart={this.dragStart.bind(this)}
+              >
+                <Row center="lg" style={RowItemStyle}>
+                  <Link
+                    to={{
+                      pathname: "/messagePage",
+                      data: orderItem
+                    }}
+                  >
+                    Chat
+                  </Link>
+                  <Col xs={6} sm={6} lg={4}>
+                    {orderItem.userName}
+                  </Col>
+                  <Col xs={3} sm={3} lg={2}>
+                    {orderItem.cartList.map(cartItem => (
+                      <Row center="lg" style={RowItemStyle}>
+                        {cartItem.name}
+                      </Row>
+                    ))}
+                  </Col>
+                </Row>
+                {/* </Grid> */}
+              </li>
+            ))}
+          </List>
+        </ul>
         <button onClick={e => this.cancelClick(e)}>Cancel</button>
         <button onClick={e => this.handleClick(e)}>Preparing</button>
         <button onClick={e => this.handleClick(e)}>Ready</button>
