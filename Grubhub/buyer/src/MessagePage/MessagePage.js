@@ -18,17 +18,43 @@ const DUMMY_DATA = [
 class MessagePage extends React.Component {
   constructor(props) {
     super(props);
+    const { data } = this.props.location;
+    console.log("print data here");
+    // console.log(data._id);
     this.state = {
       fake_messages: DUMMY_DATA,
-      messages: []
+      messages: [],
+      orderId: data._id
     };
-    axios
-      .get("http://localhost:4000/api/buyer/messages/getTextbox")
-      .then(response => {
-        this.setState({
-          messages: this.state.messages.concat(response.data)
+
+    // axios
+    //   .get("http://localhost:4000/api/buyer/messages/getTextbox", {
+    //     params: {
+    //       orderId: data._id
+    //     }
+    //   })
+    //   .then(response => {
+    //     this.setState({
+    //       messages: this.state.messages.concat(response.data)
+    //     });
+    //   });
+  }
+  componentDidMount() {
+    var self = this;
+    const { data } = this.props.location;
+    setInterval(function() {
+      axios
+        .get("http://localhost:4000/api/buyer/messages/getTextbox", {
+          params: {
+            orderId: data._id
+          }
+        })
+        .then(response => {
+          self.setState({
+            messages: response.data
+          });
         });
-      });
+    }, 1000);
   }
 
   render() {
@@ -36,10 +62,10 @@ class MessagePage extends React.Component {
       <div className="app">
         <Title />
         <MessageList
-          roomId={this.state.roomId}
-          messages={this.state.messages} //dummy data change later
+          orderId={this.state.orderId}
+          messages={this.state.messages}
         />
-        <SendMessageForm sendMessage={this.sendMessage} />
+        <SendMessageForm orderId={this.state.orderId} />
       </div>
     );
   }
@@ -61,10 +87,12 @@ class MessageList extends React.Component {
   }
 }
 class SendMessageForm extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    const orderId = this.props.orderId;
     this.state = {
-      message: ""
+      message: "",
+      orderId: orderId
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -78,20 +106,19 @@ class SendMessageForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    //this.props.sendMessage(this.state.message);
-    // this.setState({
-    //   message: ""
-    // });
-
     var new_messages = this.state.message;
     console.log(new_messages);
+
+    const orderId = this.state.orderId;
+    console.log("print orderId");
+    console.log(this.state.orderId);
 
     axios
       .get("http://localhost:4000/api/buyer/messages/textbox", {
         params: {
           // send to backend
-          // userId: user.id,
-          messages: new_messages
+          messages: new_messages,
+          orderId: orderId
         }
       })
       .then(response => {

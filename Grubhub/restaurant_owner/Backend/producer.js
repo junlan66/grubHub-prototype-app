@@ -26,7 +26,7 @@ var KeyedMessage = kafka.KeyedMessage;
 exports.textbox = function(req, res) {
   var content = req.query.messages;
   var orderId = req.query.orderId;
-  //console.log("print once and " + content);
+  console.log("print once and " + content);
   var client = new kafka.KafkaClient("localhost:2181", "my-client-id", {
     sessionTimeout: 300,
     spinDelay: 100,

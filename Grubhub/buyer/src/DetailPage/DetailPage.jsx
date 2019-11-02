@@ -1,5 +1,6 @@
 import React from "react";
 import { Avatar, List, ListItem } from "material-ui";
+import { Link } from "react-router-dom";
 import { Grid, Row, Col } from "react-flexbox-grid";
 import { withRouter } from "react-router";
 import axios from "axios";
@@ -16,7 +17,8 @@ class DetailPage extends React.Component {
       userID: this.props.user.id,
       foodItems: [],
       lunchItems: [],
-      cartBrItems: []
+      cartBrItems: [],
+      orderItems: []
     };
 
     this.Cart = this.Cart.bind(this);
@@ -36,6 +38,15 @@ class DetailPage extends React.Component {
       .then(response => {
         this.setState({
           lunchItems: this.state.lunchItems.concat(response.data)
+        });
+      });
+    axios
+      .get("http://localhost:4000/api/buyer/order/getOrder")
+      .then(response => {
+        console.log(response.data);
+        // console.log("data" + response.data.toString());
+        this.setState({
+          orderItems: this.state.orderItems.concat(response.data)
         });
       });
   }
@@ -124,6 +135,33 @@ class DetailPage extends React.Component {
           <button onClick={e => this.handleClick(this.state.cartBrItems)}>
             Submit Order
           </button>
+        </List>
+        <List>
+          Order List
+          {this.state.orderItems.map(orderItem => (
+            <Grid fluid key={orderItem._id}>
+              <Row center="lg" style={RowItemStyle}>
+                <Link
+                  to={{
+                    pathname: "/messagePage",
+                    data: orderItem
+                  }}
+                >
+                  Chat
+                </Link>
+                <Col xs={6} sm={6} lg={4}>
+                  {orderItem.userName}
+                </Col>
+                <Col xs={3} sm={3} lg={2}>
+                  {orderItem.cartList.map(cartItem => (
+                    <Row center="lg" style={RowItemStyle}>
+                      {cartItem.name}
+                    </Row>
+                  ))}
+                </Col>
+              </Row>
+            </Grid>
+          ))}
         </List>
       </div>
     );

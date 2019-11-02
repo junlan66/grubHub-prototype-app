@@ -11,8 +11,6 @@ class HomePage extends React.Component {
     this.state = {
       orderItems: []
     };
-
-    // this.Cart = this.Cart.bind(this);
     axios
       .get("http://localhost:5000/api/restaurant/order/getOrder")
       .then(response => {
@@ -30,7 +28,6 @@ class HomePage extends React.Component {
       .post("http://localhost:5000/api/restaurant/dataQuery/cancelOrder")
       .then(response => {});
   }
-  chatClick(orderItem) {}
   toggleDrawer = () => this.setState({ open: !this.state.open });
   render() {
     return (
@@ -90,7 +87,7 @@ class HomePage extends React.Component {
                     data: orderItem
                   }}
                 >
-                  Chart
+                  Chat
                 </Link>
                 <Col xs={6} sm={6} lg={4}>
                   {orderItem.userName}

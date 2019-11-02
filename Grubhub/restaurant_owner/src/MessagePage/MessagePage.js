@@ -26,17 +26,24 @@ class MessagePage extends React.Component {
       messages: [],
       orderId: data._id
     };
-    axios
-      .get("http://localhost:5000/api/restaurant/messages/getTextbox", {
-        params: {
-          orderId: data._id
-        }
-      })
-      .then(response => {
-        this.setState({
-          messages: this.state.messages.concat(response.data)
+  }
+
+  componentDidMount() {
+    var self = this;
+    const { data } = this.props.location;
+    setInterval(function() {
+      axios
+        .get("http://localhost:5000/api/restaurant/messages/getTextbox", {
+          params: {
+            orderId: data._id
+          }
+        })
+        .then(response => {
+          self.setState({
+            messages: response.data
+          });
         });
-      });
+    }, 1000);
   }
 
   render() {
@@ -44,8 +51,8 @@ class MessagePage extends React.Component {
       <div className="app">
         <Title />
         <MessageList
-          roomId={this.state.roomId}
-          messages={this.state.messages} //dummy data change later
+          orderId={this.state.orderId}
+          messages={this.state.messages}
         />
         <SendMessageForm orderId={this.state.orderId} />
       </div>

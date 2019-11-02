@@ -30,6 +30,7 @@ router.get("/buyer/login/lunch", login.getLunchMenu);
 router.get("/buyer/messages/textbox", messages.textbox);
 router.get("/buyer/messages/getTextbox", messageRoute.getTextbox);
 router.post("/buyer/order/submitOrder", messageRoute.submitOrder);
+router.get("/buyer/order/getOrder", messageRoute.getOrder);
 
 app.use("/api", router);
 app.listen(4000);
