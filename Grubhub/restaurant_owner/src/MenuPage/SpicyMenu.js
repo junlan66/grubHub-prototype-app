@@ -135,20 +135,20 @@ class SpicyMenu extends React.Component {
   render() {
     //added
     const { search } = this.state;
-    const { lunchItemsOg, foodItemsOg, currentPage, todosPerPage } = this.state;
+    const { lunchItems, foodItems, currentPage, todosPerPage } = this.state;
 
     // Logic for displaying todos
     const indexOfLastTodo = currentPage * todosPerPage;
     const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
-    const currentTodos = lunchItemsOg.slice(indexOfFirstTodo, indexOfLastTodo);
-    const currentTodosBreakfast = foodItemsOg.slice(
+    const currentTodos = lunchItems.slice(indexOfFirstTodo, indexOfLastTodo);
+    const currentTodosBreakfast = foodItems.slice(
       indexOfFirstTodo,
       indexOfLastTodo
     );
 
     // Logic for displaying page numbers
     const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(lunchItemsOg.length / todosPerPage); i++) {
+    for (let i = 1; i <= Math.ceil(lunchItems.length / todosPerPage); i++) {
       pageNumbers.push(i);
     }
 
