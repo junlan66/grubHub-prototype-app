@@ -53,17 +53,6 @@ class List extends React.Component {
     e.target.parentNode.insertBefore(placeholder, e.target);
   }
   render() {
-    // var listItems = this.state.colors.map((item, i) => {
-    //   return (
-    //     <li
-    //       data-id={i}
-    //       key={i}
-    //       draggable='true'
-    //       onDragEnd={this.dragEnd.bind(this)}
-    //       onDragStart={this.dragStart.bind(this)}>{item}</li>
-    //   )
-    //  });
-
     return (
       <ul onDragOver={this.dragOver.bind(this)}>
         {this.state.orderItems.map((orderItem, i) => (
@@ -82,7 +71,12 @@ class List extends React.Component {
             >
               Chat
             </Link>
-            {orderItem._id + " " + orderItem.userName}
+            {" Order ID: " +
+              orderItem._id +
+              " From buyer: " +
+              orderItem.userName +
+              " Items: " +
+              orderItem.cartList[0].name}
           </li>
         ))}
       </ul>
@@ -96,23 +90,15 @@ class HomePage extends React.Component {
     this.state = {
       orderItems: []
     };
-    // axios
-    //   .get("http://localhost:5000/api/restaurant/order/getOrder")
-    //   .then(response => {
-    //     //console.log(response.data);
-    //     // console.log("data" + response.data.toString());
-    //     this.setState({
-    //       orderItems: this.state.orderItems.concat(response.data)
-    //     });
-    //     console.log("print");
-    //     console.log(this.state.orderItems);
-    //   });
   }
 
   render() {
     return (
       <div>
-        <h4>Restaurant Order</h4>
+        <Link to="../profile" className="btn btn-link">
+          Edit Restaurant Profile
+        </Link>
+        <h4>My Restaurant Orders</h4>
         <List></List>
       </div>
     );
@@ -124,7 +110,7 @@ class HomePage extends React.Component {
   //     .post("http://localhost:5000/api/restaurant/dataQuery/cancelOrder")
   //     .then(response => {});
   // }
-  //toggleDrawer = () => this.setState({ open: !this.state.open });
+  // toggleDrawer = () => this.setState({ open: !this.state.open });
   // render() {
   //   return (
   //     <div>
