@@ -18,7 +18,8 @@ class DetailPage extends React.Component {
       foodItems: [],
       lunchItems: [],
       cartBrItems: [],
-      orderItems: []
+      orderItems: [],
+      pastOrderItems: []
     };
 
     this.Cart = this.Cart.bind(this);
@@ -48,6 +49,18 @@ class DetailPage extends React.Component {
         this.setState({
           orderItems: this.state.orderItems.concat(response.data)
         });
+      });
+    axios
+      .get("http://localhost:4000/api/buyer/order/getPastOrder")
+      .then(response => {
+        console.log("response.data)");
+        console.log(response.data);
+        // console.log("data" + response.data.toString());
+        this.setState({
+          pastOrderItems: this.state.pastOrderItems.concat(response.data)
+        });
+        console.log("past orders");
+        console.log(this.state.pastOrderItems);
       });
   }
 
@@ -130,6 +143,7 @@ class DetailPage extends React.Component {
                   1
                 </Col>
               </Row>
+              Subtotal {cartBrItem.price}
             </Grid>
           ))}
           <button onClick={e => this.handleClick(this.state.cartBrItems)}>
@@ -163,6 +177,14 @@ class DetailPage extends React.Component {
             </Grid>
           ))}
         </List>
+
+        <Link
+          to={{
+            pathname: "/order"
+          }}
+        >
+          Order History
+        </Link>
       </div>
     );
   }

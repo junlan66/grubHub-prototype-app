@@ -16,7 +16,7 @@ class SpicyMenu extends React.Component {
       lunchItemsOg: [],
       foodItemsOg: [],
       currentPage: 1,
-      todosPerPage: 2
+      todosPerPage: 3
     };
     this.Remove = this.Remove.bind(this);
     this.RemoveLunch = this.RemoveLunch.bind(this);
@@ -230,7 +230,7 @@ class SpicyMenu extends React.Component {
               </Row>
             </Grid>
           ))}
-          Lunch
+          Snack
           {currentTodos.map(lunchItem => (
             <Grid fluid key={lunchItem.id}>
               <Row center="lg" style={RowItemStyle}>

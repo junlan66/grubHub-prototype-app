@@ -40,19 +40,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
-// app.use("/", index);
-// app.use("/user", passport.authenticate("jwt", { session: false }), user);
-// app.use("/auth", auth);
-
-// catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   var err = new Error("Not Found");
-//   err.status = 404;
-//   next(err);
-// });
-
-// error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
@@ -70,10 +57,11 @@ router.post("/restaurant/deleteMenu", menuManagement.deleteMenu);
 router.get("/restaurant/dataQuery/lunch", dataQuery.getLunchMenu);
 router.get("/restaurant/dataQuery/breakfast", dataQuery.getmenu);
 router.get("/restaurant/dataQuery/userInfo", dataQuery.userInfo);
-router.get("/restaurant/dataQuery/orders", dataQuery.getOrders);
 router.post("/restaurant/dataQuery/cancelOrder", dataQuery.cancelOrders);
 router.get("/restaurant/messages/textbox", messages.textbox);
 router.get("/restaurant/messages/getTextbox", messageRoute.getTextbox);
+router.get("/restaurant/messages/deleteOrder", messageRoute.deleteOrder);
 router.get("/restaurant/order/getOrder", messageRoute.getOrder);
+router.post("/restaurant/order/submitPastOrder", messageRoute.submitPastOrder);
 app.use("/api", router);
 app.listen(5000);

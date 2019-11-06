@@ -1,24 +1,17 @@
 const passport = require("passport");
 const passportJWT = require("passport-jwt");
-
 const ExtractJWT = passportJWT.ExtractJwt;
-
 const LocalStrategy = require("passport-local").Strategy;
 const JWTStrategy = passportJWT.Strategy;
-var mysql = require("mysql");
-var connection = mysql.createConnection({
-  host: "127.0.0.1", //3306
-  user: "root",
-  password: "shirley123",
-  database: "grubHub"
-});
-connection.connect(function(err) {
-  if (!err) {
-    console.log("Database is connected ... nn");
-  } else {
-    console.log("Error connecting database ... nn" + err);
-  }
-});
+var MongoClient = require("mongodb").MongoClient;
+var assert = require("assert");
+// connect string for mongodb server running locally, connecting to a database called test
+var url = "mongodb://127.0.0.1:27017";
+const dbName = "grabhub";
+var mongodb;
+const options1 = {
+  useUnifiedTopology: true
+};
 
 passport.use(
   new LocalStrategy(
@@ -28,37 +21,46 @@ passport.use(
     },
     function(email, password, cb) {
       console.log("in login");
-      connection.query("SELECT * FROM buyer WHERE email = ?", [email], function(
-        error,
-        results,
-        fields
-      ) {
+      MongoClient.connect(url, options1, function(err, client) {
+        assert.equal(null, err);
+        console.log("Connected correctly to MongoDB server login.");
         console.log("backedn received email is", email);
         console.log("backedn received passport is", password);
-        if (error) {
-          console.log("error ocurred", error);
-          return cb(err);
-        } else {
-          if (results.length > 0) {
-            console.log(results[0].password);
-            if (results[0].password == password) {
-              var user = results[0];
-              console.log("USER IN BACK");
-              console.log(user);
-              return cb(null, user, {
-                message: "Logged In Successfully"
-              });
-            } else {
-              console.log("Email and password does not match");
+        const db = client.db(dbName);
+        mongodb = db;
+        var query = { email: email };
+        db.collection("buyer")
+          .find(query)
+          .toArray(function(error, results) {
+            if (error) {
               console.log("error ocurred", error);
               return cb(err);
+            } else {
+              if (results.length > 0) {
+                console.log(results[0].password);
+                if (results[0].password == password) {
+                  var user = results[0];
+                  console.log("USER IN BACK");
+                  console.log(user);
+                  return cb(null, user, {
+                    message: "Logged In Successfully"
+                  });
+                } else {
+                  console.log("real pass found");
+                  console.log(results[0].password);
+                  console.log("Email and password does not match");
+                  console.log("error ocurred", error);
+                  return cb(err);
+                }
+              } else {
+                console.log("Email does not exits");
+                console.log("error ocurred", error);
+                return cb(null, false, {
+                  message: "Incorrect email or password."
+                });
+              }
             }
-          } else {
-            console.log("Email does not exits");
-            console.log("error ocurred", error);
-            return cb(null, false, { message: "Incorrect email or password." });
-          }
-        }
+          });
       });
     }
   )

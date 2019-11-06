@@ -48,13 +48,14 @@ router.post("/buyer/register", login.register);
 router.post("/buyer/login", login.login);
 router.post("/buyer/login/cart", login.cart);
 router.get("/buyer/login/userInfo", login.userInfo);
-router.get("/buyer/login/getUserInfo", login.getUserInfo);
+//router.get("/buyer/login/getUserInfo", login.getUserInfo);
 router.get("/buyer/login/breakfast", login.getmenu);
 router.get("/buyer/login/lunch", login.getLunchMenu);
 router.get("/buyer/messages/textbox", messages.textbox);
 router.get("/buyer/messages/getTextbox", messageRoute.getTextbox);
 router.post("/buyer/order/submitOrder", messageRoute.submitOrder);
 router.get("/buyer/order/getOrder", messageRoute.getOrder);
+router.get("/buyer/order/getPastOrder", messageRoute.getPastOrder);
 
 app.use("/api", router);
 app.listen(4000);

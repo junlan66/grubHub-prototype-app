@@ -20,7 +20,7 @@ class List extends React.Component {
     axios
       .get("http://localhost:5000/api/restaurant/order/getOrder")
       .then(response => {
-        //console.log(response.data);
+        console.log(response.data);
         // console.log("data" + response.data.toString());
         this.setState({
           orderItems: this.state.orderItems.concat(response.data)
@@ -52,6 +52,25 @@ class List extends React.Component {
     this.over = e.target;
     e.target.parentNode.insertBefore(placeholder, e.target);
   }
+  deliveredClick(orderItem) {
+    console.log("Delivered");
+    axios
+      .post("http://localhost:5000/api/restaurant/order/submitPastOrder", {
+        orderItem: orderItem
+      })
+      .then(response => {
+        console.log(response);
+      });
+
+    axios
+      .get("http://localhost:5000/api/restaurant/messages/deleteOrder", {
+        params: {
+          orderId: orderItem._id
+        }
+      })
+      .then(response => {});
+  }
+
   render() {
     return (
       <ul onDragOver={this.dragOver.bind(this)}>
@@ -63,6 +82,9 @@ class List extends React.Component {
             onDragEnd={this.dragEnd.bind(this)}
             onDragStart={this.dragStart.bind(this)}
           >
+            <button onClick={e => this.deliveredClick(orderItem)}>
+              Delivered
+            </button>
             <Link
               to={{
                 pathname: "/messagePage",
@@ -98,18 +120,12 @@ class HomePage extends React.Component {
         <Link to="../profile" className="btn btn-link">
           Edit Restaurant Profile
         </Link>
-        <h4>My Restaurant Orders</h4>
+        <h4>My Orders</h4>
         <List></List>
       </div>
     );
   }
-  // cancelClick(e) {
-  //   e.preventDefault();
-  //   console.log("canceled");
-  //   axios
-  //     .post("http://localhost:5000/api/restaurant/dataQuery/cancelOrder")
-  //     .then(response => {});
-  // }
+
   // toggleDrawer = () => this.setState({ open: !this.state.open });
   // render() {
   //   return (

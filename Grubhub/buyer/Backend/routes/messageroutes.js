@@ -9,21 +9,6 @@ const options1 = {
 };
 
 exports.getTextbox = function(req, res) {
-  //   MongoClient.connect(url, options1, function(err, client) {
-  //     assert.equal(null, err);
-  //     console.log("Connected correctly to MongoDB server.");
-  //     const db = client.db(dbName);
-  //     mongodb = db;
-  //     db.collection("messages")
-  //       .find({})
-  //       .toArray(function(err, result) {
-  //         if (err) throw err;
-  //         console.log(result);
-  //         res.send(result);
-  //         //db.close();
-  //       });
-  //   });
-  // };
   console.log("Print id  " + req.query.orderId);
   var data = {
     buyerId: req.query.buyerId,
@@ -53,7 +38,7 @@ exports.submitOrder = function(req, res) {
     console.log("Connected correctly to MongoDB server.");
     const db = client.db(dbName);
     mongodb = db;
-    db.collection("customers").insert(oneOrder, function(err, res) {
+    db.collection("orders").insert(oneOrder, function(err, res) {
       if (err) throw err;
       console.log("1 cart list inserted");
       //db.close();
@@ -61,18 +46,31 @@ exports.submitOrder = function(req, res) {
   });
 };
 
+exports.getPastOrder = function(req, res) {
+  MongoClient.connect(url, options1, function(err, client) {
+    assert.equal(null, err);
+    console.log("Connected correctly to MongoDB server.");
+    const db = client.db(dbName);
+    mongodb = db;
+    db.collection("pastOrders")
+      .find({})
+      .toArray(function(err, result) {
+        if (err) throw err;
+        res.send(result);
+        //db.close();
+      });
+  });
+};
 exports.getOrder = function(req, res) {
   MongoClient.connect(url, options1, function(err, client) {
     assert.equal(null, err);
     console.log("Connected correctly to MongoDB server.");
     const db = client.db(dbName);
     mongodb = db;
-    db.collection("customers")
+    db.collection("orders")
       .find({})
       .toArray(function(err, result) {
         if (err) throw err;
-        //var myCart = result.query.userId;
-        // console.log(result);
         res.send(result);
         //db.close();
       });
